@@ -1,7 +1,13 @@
+const CLIENT_ID = "5wvogctgh8m91o9xx5f5d425gk4aap"; // публичный Client ID Twitch
+
+let TOKEN = null; // сюда запишем токен после запроса к серверу
+
 async function getToken() {
-  const res = await fetch('/api/getToken');
+  if (TOKEN) return TOKEN; // если токен уже есть, используем его
+  const res = await fetch('/api/getToken'); // вызываем серверный API на Vercel
   const data = await res.json();
-  return data.access_token;
+  TOKEN = data.access_token;
+  return TOKEN;
 }
 
 async function getCategoryId(token, name) {
@@ -42,17 +48,18 @@ async function findChannels() {
   const progress = document.getElementById("progress");
   const tableBody = document.querySelector("#resultTable tbody");
   const category = document.getElementById("categoryInput").value.trim() || "Just Chatting";
-  const limit = parseInt(document.getElementById("limitSelect").value) || 20;
+  const limit = parseInt(document.getElementById("limitSelect")?.value) || 20;
 
   status.textContent = "загрузка...";
   progress.style.setProperty("--progress", "20%");
   tableBody.innerHTML = "";
 
   try {
+    const token = await getToken(); // получаем токен
     progress.style.setProperty("--progress", "40%");
-    const gameId = await getCategoryId(TOKEN, category);
+    const gameId = await getCategoryId(token, category);
     progress.style.setProperty("--progress", "60%");
-    const streams = await getStreams(TOKEN, gameId);
+    const streams = await getStreams(token, gameId);
     progress.style.setProperty("--progress", "100%");
 
     if (streams.length === 0) {
@@ -61,7 +68,7 @@ async function findChannels() {
     }
 
     const sorted = streams
-      .sort((a, b) => a.viewer_count - b.viewer_count)
+      .sort((a, b) => b.viewer_count - a.viewer_count)
       .slice(0, limit);
 
     sorted.forEach(s => {
