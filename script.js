@@ -1,12 +1,5 @@
-const CLIENT_ID = "grcjha6zinobdax6ew0gt5bqqybigx";
-
-const NETLIFY_API = "https://jisatsushimasu13.netlify.app/.netlify/functions/token";
-
-async function getToken() {
-  const res = await fetch(NETLIFY_API);
-  const data = await res.json();
-  return data.access_token;
-}
+const CLIENT_ID = "5wvogctgh8m91o9xx5f5d425gk4aap";
+const CLIENT_SECRET = "3fpxggchzeqtr1o3pp153krtdaajh6";
 
 async function getToken() {
   const res = await fetch(`https://id.twitch.tv/oauth2/token?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=client_credentials`, {
