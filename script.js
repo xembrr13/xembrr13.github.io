@@ -47,6 +47,7 @@ async function findChannels() {
   const progress = document.getElementById("progress");
   const tableBody = document.querySelector("#resultTable tbody");
   const category = document.getElementById("categoryInput").value.trim() || "Just Chatting";
+  const limit = parseInt(document.getElementById("limitSelect").value) || 20;
 
   status.textContent = "загрузка...";
   progress.style.setProperty("--progress", "20%");
@@ -65,7 +66,10 @@ async function findChannels() {
       return;
     }
 
-    const sorted = streams.sort((a, b) => a.viewer_count - b.viewer_count).slice(0, 20);
+    const sorted = streams
+      .sort((a, b) => a.viewer_count - b.viewer_count)
+      .slice(0, limit);
+
     sorted.forEach(s => {
       const row = document.createElement("tr");
       row.innerHTML = `
