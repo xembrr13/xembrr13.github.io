@@ -1,13 +1,10 @@
 const CLIENT_ID = "5wvogctgh8m91o9xx5f5d425gk4aap"; // публичный Client ID Twitch
 
-let TOKEN = null; // сюда запишем токен после запроса к серверу
-
 async function getToken() {
-  if (TOKEN) return TOKEN; // если токен уже есть, используем его
-  const res = await fetch('/api/getToken'); // вызываем серверный API на Vercel
+  // Запрашиваем токен у сервера
+  const res = await fetch('/api/getToken');
   const data = await res.json();
-  TOKEN = data.access_token;
-  return TOKEN;
+  return data.access_token;
 }
 
 async function getCategoryId(token, name) {
@@ -55,11 +52,11 @@ async function findChannels() {
   tableBody.innerHTML = "";
 
   try {
-    const token = await getToken(); // получаем токен
+    const token = await getToken(); // обязательно сохраняем токен в локальную переменную
     progress.style.setProperty("--progress", "40%");
-    const gameId = await getCategoryId(token, category);
+    const gameId = await getCategoryId(token, category); // передаём token сюда
     progress.style.setProperty("--progress", "60%");
-    const streams = await getStreams(token, gameId);
+    const streams = await getStreams(token, gameId); // и сюда тоже
     progress.style.setProperty("--progress", "100%");
 
     if (streams.length === 0) {
