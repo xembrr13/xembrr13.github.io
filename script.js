@@ -1,13 +1,16 @@
 const CLIENT_ID = "5wvogctgh8m91o9xx5f5d425gk4aap"; // публичный Client ID Twitch
+let TOKEN = null; // глобальная переменная для токена
 
 async function getToken() {
-  // Запрашиваем токен у сервера
-  const res = await fetch('/api/getToken');
+  if (TOKEN) return TOKEN; // если токен уже есть, возвращаем его
+  const res = await fetch('/api/getToken'); // вызываем серверный API
   const data = await res.json();
-  return data.access_token;
+  TOKEN = data.access_token; // сохраняем в глобальную переменную
+  return TOKEN;
 }
 
-async function getCategoryId(token, name) {
+async function getCategoryId(name) {
+  const token = await getToken(); // используем глобальную TOKEN
   const res = await fetch(`https://api.twitch.tv/helix/games?name=${encodeURIComponent(name)}`, {
     headers: {
       "Client-ID": CLIENT_ID,
@@ -19,7 +22,8 @@ async function getCategoryId(token, name) {
   return data.data[0].id;
 }
 
-async function getStreams(token, game_id) {
+async function getStreams(game_id) {
+  const token = await getToken(); // используем глобальную TOKEN
   let url = `https://api.twitch.tv/helix/streams?game_id=${game_id}&first=100&language=ru`;
   let all = [];
   while (url) {
@@ -52,11 +56,10 @@ async function findChannels() {
   tableBody.innerHTML = "";
 
   try {
-    const token = await getToken(); // обязательно сохраняем токен в локальную переменную
     progress.style.setProperty("--progress", "40%");
-    const gameId = await getCategoryId(token, category); // передаём token сюда
+    const gameId = await getCategoryId(category);
     progress.style.setProperty("--progress", "60%");
-    const streams = await getStreams(token, gameId); // и сюда тоже
+    const streams = await getStreams(gameId);
     progress.style.setProperty("--progress", "100%");
 
     if (streams.length === 0) {
