@@ -68,7 +68,7 @@ async function findChannels() {
     }
 
     const sorted = streams
-      .sort((a, b) => b.viewer_count - a.viewer_count)
+      .sort((a, b) => a.viewer_count - b.viewer_count)
       .slice(0, limit);
 
     sorted.forEach(s => {
