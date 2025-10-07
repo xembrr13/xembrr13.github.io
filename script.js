@@ -1,5 +1,5 @@
 const CLIENT_ID = "5wvogctgh8m91o9xx5f5d425gk4aap";
-const CLIENT_SECRET = "3fpxggchzeqtr1o3pp153krtdaajh6";
+const CLIENT_SECRET = "z5jn29kh3ls4ydo1ejilmdy5jpnc3n";
 
 async function getToken() {
   const res = await fetch(`https://id.twitch.tv/oauth2/token?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=client_credentials`, {
