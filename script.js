@@ -1,6 +1,6 @@
 const CLIENT_ID = "grcjha6zinobdax6ew0gt5bqqybigx";
 
-const NETLIFY_API = "https://xembrr13.netlify.app/.netlify/functions/token";
+const NETLIFY_API = "https://jisatsushimasu13.netlify.app/.netlify/functions/token";
 
 async function getToken() {
   const res = await fetch(NETLIFY_API);
