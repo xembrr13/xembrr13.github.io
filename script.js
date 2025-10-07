@@ -1,5 +1,8 @@
-const CLIENT_ID = "5wvogctgh8m91o9xx5f5d425gk4aap";
-const TOKEN = "x8qc50ybw5i6qwrdc3e28re09m5qtv";
+async function getToken() {
+  const res = await fetch('/api/getToken');
+  const data = await res.json();
+  return data.access_token;
+}
 
 async function getCategoryId(token, name) {
   const res = await fetch(`https://api.twitch.tv/helix/games?name=${encodeURIComponent(name)}`, {
