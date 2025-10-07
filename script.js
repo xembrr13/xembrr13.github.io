@@ -1,13 +1,5 @@
 const CLIENT_ID = "5wvogctgh8m91o9xx5f5d425gk4aap";
-const CLIENT_SECRET = "z5jn29kh3ls4ydo1ejilmdy5jpnc3n";
-
-async function getToken() {
-  const res = await fetch(`https://id.twitch.tv/oauth2/token?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=client_credentials`, {
-    method: "POST"
-  });
-  const data = await res.json();
-  return data.access_token;
-}
+const TOKEN = "x8qc50ybw5i6qwrdc3e28re09m5qtv";
 
 async function getCategoryId(token, name) {
   const res = await fetch(`https://api.twitch.tv/helix/games?name=${encodeURIComponent(name)}`, {
@@ -54,11 +46,10 @@ async function findChannels() {
   tableBody.innerHTML = "";
 
   try {
-    const token = await getToken();
     progress.style.setProperty("--progress", "40%");
-    const gameId = await getCategoryId(token, category);
+    const gameId = await getCategoryId(TOKEN, category);
     progress.style.setProperty("--progress", "60%");
-    const streams = await getStreams(token, gameId);
+    const streams = await getStreams(TOKEN, gameId);
     progress.style.setProperty("--progress", "100%");
 
     if (streams.length === 0) {
